@@ -12,8 +12,10 @@ namespace RockPaperScissors
 {
     public partial class Form1 : Form
     {
+        Random rng = new Random();
         PictureBox pic;
-        string[] choice = new string[2];
+        int[] choice;
+        string[] rps = { "rock","paper","scissors"};
         public Form1()
         {
             this.Size = new Size(840,500);
@@ -109,20 +111,21 @@ namespace RockPaperScissors
             switch (pic.Name)
             {
                 case "rock":
-                    choice
+                    choice[0] = 0;
                     break;
                 case "paper":
-                    //
+                    choice[0] = 1;
                     break;
                 case "scissors":
-                    //
+                    choice[0] = 2;
                     break;
             }
         }
 
         private void Btn_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            choice[1]= rng.Next(0, 2);
+
         }
         private void menuFile_Select(object sender, EventArgs e)
         {
