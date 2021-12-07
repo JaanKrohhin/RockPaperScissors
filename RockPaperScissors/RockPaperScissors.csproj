@@ -59,18 +59,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -81,10 +81,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\paper.png" />
-    <Content Include="Resources\rock.png" />
-    <Content Include="Resources\rock_39413.ico" />
-    <Content Include="Resources\scissors.png" />
+    <Content Include="Resources\battle.ico" />
+    <Content Include="Resources\paper1.jpg" />
+    <Content Include="Resources\paper2.jpg" />
+    <Content Include="Resources\paper3.jpg" />
+    <Content Include="Resources\results.txt" />
+    <Content Include="Resources\rock1.jpg" />
+    <Content Include="Resources\rock2.jpg" />
+    <Content Include="Resources\rock3.jpg" />
+    <Content Include="Resources\scissors1.jpg" />
+    <Content Include="Resources\scissors2.jpg" />
+    <Content Include="Resources\scissors3.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
