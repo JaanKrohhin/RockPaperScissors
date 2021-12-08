@@ -25,7 +25,7 @@ namespace RockPaperScissors
         ListBox list;
         public Form1()
         {
-            //resultsRead();
+            resultsRead();
             choice[0] = "rock";
             this.Size = new Size(500,600);
             this.Text = "Rock Papers Scissors";
@@ -130,12 +130,12 @@ namespace RockPaperScissors
             m.Checked = !m.Checked;
             if (m.Checked==true)
             {
-                this.ForeColor = Color.Gray;
+                this.BackgroundImage = Properties.Resources.back;
             }
             else
             {
+                this.BackgroundImage = null;
                 this.BackColor = Color.LightCyan;
-                this.ForeColor = Color.Black;
             }
         }
 
@@ -190,12 +190,10 @@ namespace RockPaperScissors
 
         private void Btn_Click(object sender, EventArgs e)
         {
-            Console.WriteLine(rps[0]);
             if (bot==true)
             {
                 choice[1] = rps[rng.Next(0,3)];
             }
-            Console.WriteLine(choice[0],',',choice[1],',', rps[rng.Next(0, rps.Length)],',',bot);
             if (win()==0)
             {
                 lbl.Text = "Opponent win";
@@ -235,7 +233,7 @@ namespace RockPaperScissors
                     }
                 }
             }
-            //resultsWrite();
+            resultsWrite();
         }
         private void menuFile_Select(object sender, EventArgs e)
         {
@@ -303,25 +301,29 @@ namespace RockPaperScissors
                 }
             }
         }
-        //private void resultsWrite()
-        //{
-        //    using (StreamWriter file = new StreamWriter(@"../../Resources/results.txt"))
-        //    {
-        //        foreach (var item in results)
-        //        {
-        //            file.WriteLine(item);
-        //        }
-        //    }
-        //}
-        //private void resultsRead()
-        //{
-        //    using (StreamReader file = new StreamReader(@"../../Resources/results.txt"))
-        //    {
-        //        for (int i = 0; i < results.Length; i++)
-        //        {
-        //            results[i]= file.ReadLine();
-        //        }
-        //    }
-        //}
+        private void resultsWrite()
+        {
+            using (StreamWriter file = new StreamWriter(@"../../Resources/results.txt"))
+            {
+                foreach (var item in results)
+                {
+                    file.WriteLine(item);
+                }
+            }
+        }
+        private void resultsRead()
+        {
+            using (StreamReader file = new StreamReader(@"../../Resources/results.txt"))
+            {
+                for (int i = 0; i < results.Length; i++)
+                {
+                    results[i] = file.ReadLine();
+                }
+            }
+        }
+        private void resultArray()
+        {
+
+        }
     }
 }

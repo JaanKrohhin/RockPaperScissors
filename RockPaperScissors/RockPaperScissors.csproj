@@ -81,6 +81,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\back.png" />
     <Content Include="Resources\battle.ico" />
     <Content Include="Resources\paper1.jpg" />
     <Content Include="Resources\paper2.jpg" />
