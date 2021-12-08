@@ -110,10 +110,11 @@ namespace RockPaperScissors
             list.Size = new Size(100,200);
             list.Location = new Point(180, 110);
             this.Controls.Add(list);
+
             MainMenu menu = new MainMenu();
             MenuItem mf = new MenuItem("Settings");
             mf.MenuItems.Add("2 Player Mode", new EventHandler(menuFile_Select3)).Shortcut = Shortcut.CtrlS;
-            mf.MenuItems.Add("Dark Theme", new EventHandler(menuFile_Select2)).Shortcut = Shortcut.CtrlD;
+            mf.MenuItems.Add("Complex Background", new EventHandler(menuFile_Select2)).Shortcut = Shortcut.CtrlD;
             mf.MenuItems.Add("Rules", new EventHandler(menuFile_Select4)).Shortcut = Shortcut.CtrlA;
             mf.MenuItems.Add("Exit", new EventHandler(menuFile_Select));
             menu.MenuItems.Add(mf);
@@ -309,7 +310,7 @@ namespace RockPaperScissors
             {
                 for (int i = 0; i < results.Length; i++)
                 {
-                    results[i] = file.ReadLine();
+                    results[i] = file.ReadToEnd().Split()[1];
                 }
             }
         }
