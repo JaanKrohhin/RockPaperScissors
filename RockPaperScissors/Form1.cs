@@ -310,11 +310,19 @@ namespace RockPaperScissors
             {
                 for (int i = 0; i < results.Length; i++)
                 {
-                    results[i] = file.ReadToEnd().Split()[1];
+                    results[i] = file.ReadToEnd().Split('_')[0];
+                }
+                foreach (var item in results)
+                {
+                    Console.WriteLine(item);
                 }
             }
         }
         private void resultArray()
+        {
+
+        }
+        private void listUpdate()
         {
 
         }
