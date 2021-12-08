@@ -114,9 +114,15 @@ namespace RockPaperScissors
             MenuItem mf = new MenuItem("Settings");
             mf.MenuItems.Add("2 Player Mode", new EventHandler(menuFile_Select3)).Shortcut = Shortcut.CtrlS;
             mf.MenuItems.Add("Dark Theme", new EventHandler(menuFile_Select2)).Shortcut = Shortcut.CtrlD;
+            mf.MenuItems.Add("Rules", new EventHandler(menuFile_Select4)).Shortcut = Shortcut.CtrlA;
             mf.MenuItems.Add("Exit", new EventHandler(menuFile_Select));
             menu.MenuItems.Add(mf);
             this.Menu = menu;
+        }
+
+        private void menuFile_Select4(object sender, EventArgs e)
+        {
+            MessageBox.Show("Paper beats Rock, Rock beats Scissors, Scissors beat Paper", "Rules of the game");
         }
 
         private void menuFile_Select3(object sender, EventArgs e)
@@ -216,21 +222,7 @@ namespace RockPaperScissors
                 if (c is PictureBox)
                 {
                     pic = c as PictureBox;
-                    switch (pic.Name.Substring(0, pic.Name.Length - 1))
-                    {
-                        case "rock":
-                            pic.Image = Image.FromFile("../../Resources/rock" + rng.Next(1, 4).ToString() + ".jpg");
-                            break;
-                        case "paper":
-                            pic.Image = Image.FromFile("../../Resources/scissors" + rng.Next(1, 4).ToString() + ".jpg");
-                            break;
-                        case "scissors":
-                            pic.Image = Image.FromFile("../../Resources/paper" + rng.Next(1, 4).ToString() + ".jpg");
-                            break;
-                        default:
-                            pic.Image = Image.FromFile("../../Resources/rock" + rng.Next(1, 4).ToString() + ".jpg");
-                            break;
-                    }
+                    pic.Image = Image.FromFile("../../Resources/"+ pic.Name.Substring(0, pic.Name.Length - 1) + rng.Next(1, 4).ToString() + ".jpg");
                 }
             }
             resultsWrite();
