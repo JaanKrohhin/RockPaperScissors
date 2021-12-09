@@ -17,15 +17,13 @@ namespace RockPaperScissors
         
         Random rng = new Random();
         PictureBox pic;
-        string[] choice = new string[2];
-        string[] rps = { "rock", "paper", "scissors"};
-        string[] results = new string[11];
+        string[] tempAr, choice = new string[2], rps = { "rock", "paper", "scissors"}, results = new string[10];
         bool bot = true;
         Label lbl;
         ListBox list;
+        Button btn;     
         public Form1()
         {
-            resultsRead();
             choice[0] = "rock";
             this.Size = new Size(500,600);
             this.Text = "Rock Papers Scissors";
@@ -38,8 +36,16 @@ namespace RockPaperScissors
             lbl.Size = new Size(100, 25);
             lbl.Location = new Point(180, 25);
             lbl.TextAlign = (ContentAlignment)HorizontalAlignment.Center;
+            lbl.Name = "outcome";
             this.Controls.Add(lbl);
-            
+
+            lbl = new Label();
+            lbl.Size = new Size(140, 25);
+            lbl.Location = new Point(20, 25);
+            lbl.Name = "choice";
+            lbl.Text = "Selected: "+Capitalize(choice[0]);
+            this.Controls.Add(lbl);
+
             pic = new PictureBox();
             pic.Image = Properties.Resources.rock1;
             pic.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -67,53 +73,55 @@ namespace RockPaperScissors
             pic.Name = "scissors1";
             this.Controls.Add(pic);
 
-            pic = new PictureBox();
-            pic.Image = Properties.Resources.rock1;
-            pic.SizeMode = PictureBoxSizeMode.StretchImage;
-            pic.Size = new Size(100, 100);
-            pic.Location = new Point(350, 70);
-            pic.Click += Pic_Click;
-            pic.Name = "rock2";
-            this.Controls.Add(pic);
-            pic.Hide();
 
-            pic = new PictureBox();
-            pic.Image = Properties.Resources.paper1;
-            pic.SizeMode = PictureBoxSizeMode.StretchImage;
-            pic.Size = new Size(100, 100);
-            pic.Location = new Point(350, 190);
-            pic.Click += Pic_Click;
-            pic.Name = "paper2";
-            this.Controls.Add(pic);
-            pic.Hide();
+            //pic = new PictureBox();
+            //pic.Image = Properties.Resources.rock1;
+            //pic.SizeMode = PictureBoxSizeMode.StretchImage;
+            //pic.Size = new Size(100, 100);
+            //pic.Location = new Point(350, 70);
+            //pic.Click += Pic_Click;
+            //pic.Name = "rock2";
+            //this.Controls.Add(pic);
+            //pic.Hide();
 
-            pic = new PictureBox();
-            pic.Image = Properties.Resources.scissors1;
-            pic.SizeMode = PictureBoxSizeMode.StretchImage;
-            pic.Size = new Size(100, 100);
-            pic.Location = new Point(350, 300);
-            pic.Click += Pic_Click;
-            pic.Name = "scissors2";
-            this.Controls.Add(pic);
-            pic.Hide();
+            //pic = new PictureBox();
+            //pic.Image = Properties.Resources.paper1;
+            //pic.SizeMode = PictureBoxSizeMode.StretchImage;
+            //pic.Size = new Size(100, 100);
+            //pic.Location = new Point(350, 190);
+            //pic.Click += Pic_Click;
+            //pic.Name = "paper2";
+            //this.Controls.Add(pic);
+            //pic.Hide();
 
-            Button btn = new Button();
+            //pic = new PictureBox();
+            //pic.Image = Properties.Resources.scissors1;
+            //pic.SizeMode = PictureBoxSizeMode.StretchImage;
+            //pic.Size = new Size(100, 100);
+            //pic.Location = new Point(350, 300);
+            //pic.Click += Pic_Click;
+            //pic.Name = "scissors2";
+            //this.Controls.Add(pic);
+            //pic.Hide();
+
+            btn = new Button();
             btn.Size = new Size(100,50);
             btn.Location = new Point(180, 50);
             btn.Click += Btn_Click;
             btn.Text = "Begin Battle";
             btn.FlatAppearance.BorderSize = 0;
             btn.BackColor = this.BackColor;
+            btn.Name = "1p";
             this.Controls.Add(btn);
 
             list = new ListBox();
-            list.Size = new Size(100,200);
-            list.Location = new Point(180, 110);
+            list.Size = new Size(120,210);
+            list.Location = new Point(170, 110);
             this.Controls.Add(list);
 
             MainMenu menu = new MainMenu();
             MenuItem mf = new MenuItem("Settings");
-            mf.MenuItems.Add("2 Player Mode", new EventHandler(menuFile_Select3)).Shortcut = Shortcut.CtrlS;
+            mf.MenuItems.Add("2 Player Mode", new EventHandler(botEn)).Shortcut = Shortcut.CtrlS;
             mf.MenuItems.Add("Complex Background", new EventHandler(menuFile_Select2)).Shortcut = Shortcut.CtrlD;
             mf.MenuItems.Add("Rules", new EventHandler(menuFile_Select4)).Shortcut = Shortcut.CtrlA;
             mf.MenuItems.Add("Exit", new EventHandler(menuFile_Select));
@@ -124,11 +132,6 @@ namespace RockPaperScissors
         private void menuFile_Select4(object sender, EventArgs e)
         {
             MessageBox.Show("Paper beats Rock, Rock beats Scissors, Scissors beat Paper", "Rules of the game");
-        }
-
-        private void menuFile_Select3(object sender, EventArgs e)
-        {
-            hiSh2player();
         }
 
         private void menuFile_Select2(object sender, EventArgs e)
@@ -179,7 +182,6 @@ namespace RockPaperScissors
                             break;
                     }
                     break;
-
             }
             switch (p.Name.Substring(0, p.Name.Length - 1))
             {
@@ -193,6 +195,7 @@ namespace RockPaperScissors
                     choice[0] = p.Name.Substring(0, p.Name.Length - 1);
                     break;
             }
+            changeLabel("choice","Selected: " + Capitalize(choice[0]), bot);
         }
 
         private void Btn_Click(object sender, EventArgs e)
@@ -203,19 +206,19 @@ namespace RockPaperScissors
             }
             if (win()==0)
             {
-                lbl.Text = "Opponent win";
+                changeLabel("outcome", "Opponent Win", bot);
             }
             else if (win()==1)
             {
-                lbl.Text = "Host win";
+                changeLabel("outcome", "Host Win", bot);
             }
             else if (win()==2)
             {
-                lbl.Text = "Stalemate";
+                changeLabel("outcome", "Stalemate", bot);
             }
             else
             {
-                lbl.Text = "What? ERR0R??";
+                changeLabel("outcome", "E440R", bot);
             }
             foreach (Control c in this.Controls)
             {
@@ -226,6 +229,8 @@ namespace RockPaperScissors
                     pic.Image = Image.FromFile("../../Resources/"+ pic.Name.Substring(0, pic.Name.Length - 1) + rng.Next(1, 4).ToString() + ".jpg");
                 }
             }
+            resultsRead();
+            listUpdate();
             resultsWrite();
         }
         private void menuFile_Select(object sender, EventArgs e)
@@ -274,33 +279,74 @@ namespace RockPaperScissors
             return 4;
 
         }
-        private void hiSh2player()
+        private void botEn(object sender, EventArgs e)
         {
-            bot = !bot;
+            btn.Click += hiSh2player(s);
+
+            bot=!bot;
+            foreach (Control c in this.Controls)
+            {
+                if (c is Button)
+                {
+                    Button btn = c as Button;
+                    if (bot == false && btn.Name == "2p") 
+                    {
+                        btn.Show();
+                    }
+                    else
+                    {
+                        if (btn.Name == "1p")
+                        {
+                            btn.Show();
+                        }
+                        else
+                        {
+                            btn.Hide();
+                        }
+
+                    }
+                }
+            }
+        }
+        private void hiSh2player(object sender, EventArgs e)
+        {
             foreach (Control c in this.Controls)
             {
                 Console.WriteLine(c);
                 if (c is PictureBox)
                 {
                     pic = c as PictureBox;
-                    if (pic.Name.Substring(pic.Name.Length - 1)== "2" && bot==false)
+                    if (pic.Name.Substring(pic.Name.Length - 1) == "1" && bot == false)
                     {
-                        pic.Show();
+                        pic.Name = pic.Name.Replace('1', '2');
+                        Console.WriteLine(pic.Name);
                     }
-                    else if (pic.Name.Substring(pic.Name.Length - 1) == "2" && bot == true)
+                    else if (pic.Name.Substring(pic.Name.Length - 1) == "1" && bot == true)
                     {
-                        pic.Hide();
+                        pic.Name = pic.Name.Replace('2', '1');
                     }
+                    //if (pic.Name.Substring(pic.Name.Length - 1)== "2" && bot==false)
+                    //{
+                    //    pic.Show();
+                    //}
+                    //else if (pic.Name.Substring(pic.Name.Length - 1) == "2" && bot == true)
+                    //{
+                    //    pic.Hide();
+                    //}
                 }
             }
+            botEn(sender, e);
         }
         private void resultsWrite()
         {
+            Array.Reverse(results);
+            Array.Copy(results, 1, results, 0, results.Length - 1);
+            results[results.Length-1] = lbl.Text;
             using (StreamWriter file = new StreamWriter(@"../../Resources/results.txt"))
             {
                 foreach (var item in results)
                 {
-                    file.WriteLine(item);
+                    file.Write(item+'-');
                 }
             }
         }
@@ -308,23 +354,56 @@ namespace RockPaperScissors
         {
             using (StreamReader file = new StreamReader(@"../../Resources/results.txt"))
             {
+                tempAr= file.ReadLine().Split('-');
                 for (int i = 0; i < results.Length; i++)
                 {
-                    results[i] = file.ReadToEnd().Split('_')[0];
+                    results[i] = tempAr[i];
                 }
-                foreach (var item in results)
-                {
-                    Console.WriteLine(item);
-                }
+                resultArraysort();
             }
         }
-        private void resultArray()
+        private void resultArraysort()
         {
-
+            Array.Reverse(results);
+            Array.Copy(results, 1, results, 0, results.Length - 1);
+            results[results.Length - 1] = lbl.Text;
         }
         private void listUpdate()
         {
+            list.Items.Clear();
+            Array.Reverse(results);
+            tempAr = results;
+            foreach (var item in results)
+            {
+                list.Items.Add(item);
+            }
+            Array.Reverse(results);
+        }
+        private void changeLabel(string name,string str, bool bo)
+        {
+            foreach (Control c in this.Controls)
+            {
+                if (c is Label)
+                {
+                    Label l = c as Label;
+                    if (l.Name == name) 
+                    {
+                        if (bo == false)
+                        {
+                            l.Text = "P" + pic.Name.Substring(pic.Name.Length - 1) + " " + str;
+                        }
+                        else
+                        {
+                            l.Text = str;
+                        }
+                    }
 
+                }
+            }
+        }
+        public string Capitalize(string word)
+        {
+            return word.Substring(0, 1).ToUpper() + word.Substring(1).ToLower();
         }
     }
 }
