@@ -1,1 +1,1 @@
-Host win-Host win-Opponent win-Stalemate-Stalemate-Opponent win-Opponent win-Stalemate-Host win-Selected: Rock-
+Host win-Host win-Host win-Host win-Host win-Host win-Host win-Host win-Host win-Opponent Win-
