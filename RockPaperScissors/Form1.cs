@@ -132,25 +132,17 @@ namespace RockPaperScissors
 
         private void Pic_Click(object sender, EventArgs e)
         {
+            lbl = (Label)getFormControl("choice");
             PictureBox p = sender as PictureBox;
             switch (p.Name.Substring(p.Name.Length - 1))
             {
                 case "1":
                     choice[0] = p.Name.Substring(0, p.Name.Length - 1);
+                    lbl.Text = "Selected: "+ Capitalize(p.Name.Substring(0, p.Name.Length - 1));
                     break;
                 case "2":
                     choice[1] = p.Name.Substring(0, p.Name.Length - 1);
-            }
-            switch (p.Name.Substring(0, p.Name.Length - 1))
-            {
-                case "rock":
-                    choice[0] = p.Name.Substring(0, p.Name.Length - 1);
-                    break;
-                case "paper":
-                    choice[0] = p.Name.Substring(0, p.Name.Length - 1);
-                    break;
-                case "scissors":
-                    choice[0] = p.Name.Substring(0, p.Name.Length - 1);
+                    lbl.Text = "P2 Selected: " + Capitalize(p.Name.Substring(0, p.Name.Length - 1));
                     break;
             }
             if (bot==false)
@@ -236,27 +228,19 @@ namespace RockPaperScissors
         }
         private void hiSh2player(object sender, EventArgs e)
         {
-            foreach (Control c in this.Controls)
+            for (int i = 0; i < 2; i++)
             {
-                if (c is PictureBox)
+                for (int j = 0; j < 3; j++)
                 {
-                    pic = c as PictureBox;
+                    pic = (PictureBox)getFormControl(rps[j] + i.ToString());
                     if (pic.Name.Substring(pic.Name.Length - 1) == "1" && bot == false)
                     {
                         pic.Name = pic.Name.Replace('1', '2');
                     }
-                    else if (pic.Name.Substring(pic.Name.Length - 1) == "1" && bot == true)
+                    else if (pic.Name.Substring(pic.Name.Length - 1) == "2" && bot == true)
                     {
                         pic.Name = pic.Name.Replace('2', '1');
                     }
-                    //if (pic.Name.Substring(pic.Name.Length - 1)== "2" && bot==false)
-                    //{
-                    //    pic.Show();
-                    //}
-                    //else if (pic.Name.Substring(pic.Name.Length - 1) == "2" && bot == true)
-                    //{
-                    //    pic.Hide();
-                    //}
                 }
             }
         }
@@ -326,7 +310,7 @@ namespace RockPaperScissors
                 list.Items.Add(results[i]);
             }
         }
-        private Control GetControl(string str)
+        private Control getFormControl(string str)
         {
             foreach (Control item in this.Controls)
             {
@@ -338,9 +322,9 @@ namespace RockPaperScissors
             return dummy;
             
         }
-        public string Capitalize(string word)
+        public string Capitalize(string str)
         {
-            return word.Substring(0, 1).ToUpper() + word.Substring(1).ToLower();
+            return str.Substring(0, 1).ToUpper() + str.Substring(1).ToLower();
         }
     }
 }
