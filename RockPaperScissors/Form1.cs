@@ -20,7 +20,7 @@ namespace RockPaperScissors
         string[] tempAr, choice = new string[2], rps = { "rock", "paper", "scissors"}, results = new string[10];
         bool bot = true,t = true;
         int count = 0;//just count through the ten
-        Label lbl;
+        Label lbl, dummy;
         ListBox list;
         Button btn;
         
@@ -136,33 +136,10 @@ namespace RockPaperScissors
             switch (p.Name.Substring(p.Name.Length - 1))
             {
                 case "1":
-                    switch (p.Name.Substring(0, p.Name.Length - 1))
-                    {
-                        case "rock":
-                            choice[0] = p.Name.Substring(0, p.Name.Length - 1);
-                            break;
-                        case "paper":
-                            choice[0] = p.Name.Substring(0, p.Name.Length - 1);
-                            break;
-                        case "scissors":
-                            choice[0] = p.Name.Substring(0, p.Name.Length - 1);
-                            break;
-                    }
+                    choice[0] = p.Name.Substring(0, p.Name.Length - 1);
                     break;
                 case "2":
-                    switch (p.Name.Substring(0, p.Name.Length - 1))
-                    {
-                        case "rock":
-                            choice[1] = p.Name.Substring(0, p.Name.Length - 1);
-                            break;
-                        case "paper":
-                            choice[1] = p.Name.Substring(0, p.Name.Length - 1);
-                            break;
-                        case "scissors":
-                            choice[1] = p.Name.Substring(0, p.Name.Length - 1);
-                            break;
-                    }
-                    break;
+                    choice[1] = p.Name.Substring(0, p.Name.Length - 1);
             }
             switch (p.Name.Substring(0, p.Name.Length - 1))
             {
@@ -180,7 +157,6 @@ namespace RockPaperScissors
             {
                 hiSh2player(sender,e);
              }
-           changeLabel("choice","Selected: " + Capitalize(choice[0]), bot);
         }
 
         private void Btn_Click(object sender, EventArgs e)
@@ -191,19 +167,15 @@ namespace RockPaperScissors
             }
             if (win()==0)
             {
-                changeLabel("outcome", "Opponent Win", bot);
             }
             else if (win()==1)
             {
-                changeLabel("outcome", "Host Win", bot);
             }
             else if (win()==2)
             {
-                changeLabel("outcome", "Stalemate", bot);
             }
             else
             {
-                changeLabel("outcome", "E440R", bot);
             }
             foreach (Control c in this.Controls)
             {
@@ -354,27 +326,17 @@ namespace RockPaperScissors
                 list.Items.Add(results[i]);
             }
         }
-        private void changeLabel(string name,string str, bool bo)
+        private Control GetControl(string str)
         {
-            //foreach (Control c in this.Controls)
-            //{
-            //    if (c is Label)
-            //    {
-            //        Label l = c as Label;
-            //        if (l.Name == name) 
-            //        {
-            //            if (bo == false)
-            //            {
-            //                l.Text = "P" + pic.Name.Substring(pic.Name.Length - 1) + " " + str;
-            //            }
-            //            else
-            //            {
-            //                l.Text = str;
-            //            }
-            //        }
-
-            //    }
-            //}
+            foreach (Control item in this.Controls)
+            {
+                if (item.Name==str)
+                {
+                    return item;
+                }
+            }
+            return dummy;
+            
         }
         public string Capitalize(string word)
         {
