@@ -98,9 +98,9 @@ namespace RockPaperScissors
             MainMenu menu = new MainMenu();
             MenuItem mf = new MenuItem("Settings");
             mf.MenuItems.Add("2 Player Mode", new EventHandler(botEn)).Shortcut = Shortcut.CtrlS;
-            mf.MenuItems.Add("Complex Background", new EventHandler(menuFile_Select2)).Shortcut = Shortcut.CtrlD;
-            mf.MenuItems.Add("Rules", new EventHandler(menuFile_Select4)).Shortcut = Shortcut.CtrlA;
-            mf.MenuItems.Add("Exit", new EventHandler(menuFile_Select));
+            mf.MenuItems.Add("Complex Background", new EventHandler(menuFile_Select1)).Shortcut = Shortcut.CtrlD;
+            mf.MenuItems.Add("Rules", new EventHandler(menuFile_Select2)).Shortcut = Shortcut.CtrlA;
+            mf.MenuItems.Add("Exit", new EventHandler(menuFile_Select3));
             menu.MenuItems.Add(mf);
             this.Menu = menu;
         }
@@ -109,17 +109,11 @@ namespace RockPaperScissors
         {
             bot = !bot;
         }
-
-        private void menuFile_Select4(object sender, EventArgs e)
-        {
-            MessageBox.Show("Paper beats Rock, Rock beats Scissors, Scissors beat Paper", "Rules of the game");
-        }
-
-        private void menuFile_Select2(object sender, EventArgs e)
+        private void menuFile_Select1(object sender, EventArgs e)
         {
             MenuItem m = sender as MenuItem;
             m.Checked = !m.Checked;
-            if (m.Checked==true)
+            if (m.Checked == true)
             {
                 this.BackgroundImage = Properties.Resources.back;
             }
@@ -130,6 +124,14 @@ namespace RockPaperScissors
             }
         }
 
+        private void menuFile_Select2(object sender, EventArgs e)
+        {
+            MessageBox.Show("Paper beats Rock, Rock beats Scissors, Scissors beat Paper", "Rules of the game");
+        }
+        private void menuFile_Select3(object sender, EventArgs e)
+        {
+            this.Close();
+        }
         private void Pic_Click(object sender, EventArgs e)
         {
             lbl = (Label)getFormControl("choice");
@@ -153,36 +155,32 @@ namespace RockPaperScissors
 
         private void Btn_Click(object sender, EventArgs e)
         {
+            lbl = (Label)getFormControl("outcome");
             if (bot==true)
             {
                 choice[1] = rps[rng.Next(0,3)];
             }
             if (win()==0)
             {
+                lbl.Text = "Opponent Win";
             }
             else if (win()==1)
             {
+                lbl.Text = "Host Win";
             }
             else if (win()==2)
             {
+                lbl.Text = "Stalemate";
             }
-            else
+            
+            for (int j = 0; j < 3; j++)
             {
+                pic = (PictureBox)getFormControl(rps[j] + pic.Name.Substring(pic.Name.Length - 1));
+                pic.Image = Image.FromFile("../../Resources/" + pic.Name.Substring(0, pic.Name.Length - 1) + rng.Next(1, 4).ToString() + ".jpg");
             }
-            foreach (Control c in this.Controls)
-            {
-                if (c is PictureBox)
-                {
-                    pic = c as PictureBox;
-                    pic.Image = Image.FromFile("../../Resources/"+ pic.Name.Substring(0, pic.Name.Length - 1) + rng.Next(1, 4).ToString() + ".jpg");
-                }
-            }
+            
             resultsWrite();
             listUpdate();
-        }
-        private void menuFile_Select(object sender, EventArgs e)
-        {
-            this.Close();
         }
         private int win()
         {
@@ -228,19 +226,18 @@ namespace RockPaperScissors
         }
         private void hiSh2player(object sender, EventArgs e)
         {
-            for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 3; j++)
             {
-                for (int j = 0; j < 3; j++)
+                Console.WriteLine(rps[j] + pic.Name.Substring(pic.Name.Length - 1));
+                if (bot==false)
                 {
-                    pic = (PictureBox)getFormControl(rps[j] + i.ToString());
-                    if (pic.Name.Substring(pic.Name.Length - 1) == "1" && bot == false)
-                    {
-                        pic.Name = pic.Name.Replace('1', '2');
-                    }
-                    else if (pic.Name.Substring(pic.Name.Length - 1) == "2" && bot == true)
-                    {
-                        pic.Name = pic.Name.Replace('2', '1');
-                    }
+                    pic = (PictureBox)getFormControl(rps[j] + "1");
+                    pic.Name = pic.Name.Replace('1', '2');
+                }
+                else 
+                {
+                    pic = (PictureBox)getFormControl(rps[j] + "2");
+                    pic.Name = pic.Name.Replace('2', '1');
                 }
             }
         }
