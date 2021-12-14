@@ -18,7 +18,7 @@ namespace RockPaperScissors
         Random rng = new Random();
         PictureBox pic;
         string[] tempAr, choice = new string[2], rps = { "rock", "paper", "scissors"}, results = new string[10];
-        bool bot = true,t = true;
+        bool bot = true, turn1 = false;
         int count = 0;//just count through the ten
         Label lbl, dummy;
         ListBox list;
@@ -26,11 +26,6 @@ namespace RockPaperScissors
         
         public Form1()
         {
-            if (t)
-            {
-                resultsRead();
-                t = !t;
-            }
             choice[0] = "rock";
             this.Size = new Size(500,600);
             this.Text = "Rock Papers Scissors";
@@ -47,7 +42,7 @@ namespace RockPaperScissors
             this.Controls.Add(lbl);
 
             lbl = new Label();
-            lbl.Size = new Size(140, 25);
+            lbl.Size = new Size(150, 25);
             lbl.Location = new Point(20, 25);
             lbl.Name = "choice";
             lbl.Text = "Selected: "+Capitalize(choice[0]);
@@ -108,6 +103,15 @@ namespace RockPaperScissors
         private void botEn(object sender, EventArgs e)
         {
             bot = !bot;
+            if (bot == false)
+            {
+                btnText(1);
+            }
+            else
+            {
+                btnText(2);
+            }
+
         }
         private void menuFile_Select1(object sender, EventArgs e)
         {
@@ -136,51 +140,72 @@ namespace RockPaperScissors
         {
             lbl = (Label)getFormControl("choice");
             PictureBox p = sender as PictureBox;
+            Console.WriteLine(p.Name);
             switch (p.Name.Substring(p.Name.Length - 1))
             {
                 case "1":
                     choice[0] = p.Name.Substring(0, p.Name.Length - 1);
                     lbl.Text = "Selected: "+ Capitalize(p.Name.Substring(0, p.Name.Length - 1));
+                    if (turn1 == true)
+                    {
+                        replaceName('1', '2');
+                    }
                     break;
                 case "2":
                     choice[1] = p.Name.Substring(0, p.Name.Length - 1);
                     lbl.Text = "P2 Selected: " + Capitalize(p.Name.Substring(0, p.Name.Length - 1));
+                    if (turn1==false)
+                    {
+                        
+                    }
                     break;
             }
-            if (bot==false)
-            {
-                hiSh2player(sender,e);
-             }
         }
 
         private void Btn_Click(object sender, EventArgs e)
         {
-            lbl = (Label)getFormControl("outcome");
-            if (bot==true)
+            if (bot==false)
             {
-                choice[1] = rps[rng.Next(0,3)];
+                btnText(2);
+                turn1 = !turn1;
+                if (turn1 == true)
+                {
+                    replaceName('1', '2');
+                }
+                else
+                {
+                    replaceName('2', '1');
+                }
             }
-            if (win()==0)
+            else
             {
-                lbl.Text = "Opponent Win";
-            }
-            else if (win()==1)
-            {
-                lbl.Text = "Host Win";
-            }
-            else if (win()==2)
-            {
-                lbl.Text = "Stalemate";
+                lbl = (Label)getFormControl("outcome");
+                if (bot==true)
+                {
+                    choice[1] = rps[rng.Next(0,3)];
+                }
+                if (win()==0)
+                {
+                    lbl.Text = "Opponent Win";
+                }
+                else if (win()==1)
+                {
+                    lbl.Text = "Host Win";
+                }
+                else if (win()==2)
+                {
+                    lbl.Text = "Stalemate";
+                }
+            
+                for (int j = 0; j < 3; j++)
+                {
+                    pic = (PictureBox)getFormControl(rps[j] + pic.Name.Substring(pic.Name.Length - 1));
+                    pic.Image = Image.FromFile("../../Resources/" + pic.Name.Substring(0, pic.Name.Length - 1) + rng.Next(1, 4).ToString() + ".jpg");
+                }
             }
             
-            for (int j = 0; j < 3; j++)
-            {
-                pic = (PictureBox)getFormControl(rps[j] + pic.Name.Substring(pic.Name.Length - 1));
-                pic.Image = Image.FromFile("../../Resources/" + pic.Name.Substring(0, pic.Name.Length - 1) + rng.Next(1, 4).ToString() + ".jpg");
-            }
-            
-            resultsWrite();
-            listUpdate();
+            //resultsWrite();
+            //listUpdate();
         }
         private int win()
         {
@@ -224,21 +249,23 @@ namespace RockPaperScissors
             return 4;
 
         }
-        private void hiSh2player(object sender, EventArgs e)
+        private void replaceName(char i, char k)
         {
             for (int j = 0; j < 3; j++)
             {
-                Console.WriteLine(rps[j] + pic.Name.Substring(pic.Name.Length - 1));
-                if (bot==false)
-                {
-                    pic = (PictureBox)getFormControl(rps[j] + "1");
-                    pic.Name = pic.Name.Replace('1', '2');
-                }
-                else 
-                {
-                    pic = (PictureBox)getFormControl(rps[j] + "2");
-                    pic.Name = pic.Name.Replace('2', '1');
-                }
+                pic = (PictureBox)getFormControl(rps[j] + i);
+                pic.Name = pic.Name.Replace(i, k);
+            }
+        }
+        private void btnText(int i)
+        {
+            if (i==1)
+            {
+                btn.Text = "Next Battle";
+            }
+            else
+            {
+                btn.Text = "Battle";
             }
         }
         private void resultsWrite()
@@ -251,20 +278,6 @@ namespace RockPaperScissors
                     file.Write(item+'-');
                 }
             }
-        }
-        private string rightLabel(string name)
-        {
-            foreach (Control c in this.Controls)
-            {
-                if (c is Label)
-                {
-                    if ((c as Label).Name==name)
-                    {
-                        return (c as Label).Text;
-                    }
-                }
-            }
-            return "Error";
         }
         private void resultsRead()
         {
