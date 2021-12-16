@@ -16,11 +16,11 @@ namespace RockPaperScissors
     {
         
         Random rng = new Random();
-        PictureBox pic;
-        string[] tempAr, choice = new string[2], rps = { "rock", "paper", "scissors"}, results = new string[10];
+        PictureBox pic1,pic2,pic3;
+        string[] tempAr, choice = new string[2] {"rock","rock"}, rps = { "rock", "paper", "scissors"}, results = new string[10];
         bool bot = true, turn1 = false;
-        int count = 0;//just count through the ten
-        Label lbl, dummy;
+        int count = 0, winEW;//just count through the ten
+        Label lbl, lbl2, dummy;
         ListBox list;
         Button btn;
         
@@ -41,39 +41,39 @@ namespace RockPaperScissors
             lbl.Name = "outcome";
             this.Controls.Add(lbl);
 
-            lbl = new Label();
-            lbl.Size = new Size(150, 25);
-            lbl.Location = new Point(20, 25);
-            lbl.Name = "choice";
-            lbl.Text = "Selected: "+Capitalize(choice[0]);
-            this.Controls.Add(lbl);
+            lbl2 = new Label();
+            lbl2.Size = new Size(200, 25);
+            lbl2.Location = new Point(20, 25);
+            lbl2.Name = "choice";
+            lbl2.Text = "Selected: "+Capitalize(choice[0]);
+            this.Controls.Add(lbl2);
 
-            pic = new PictureBox();
-            pic.Image = Properties.Resources.rock1;
-            pic.SizeMode = PictureBoxSizeMode.StretchImage;
-            pic.Size = new Size(100, 100);
-            pic.Location = new Point(25, 70);
-            pic.Click += Pic_Click;
-            pic.Name = "rock1";
-            this.Controls.Add(pic);
+            pic1 = new PictureBox();
+            pic1.Image = Properties.Resources.rock1;
+            pic1.SizeMode = PictureBoxSizeMode.StretchImage;
+            pic1.Size = new Size(100, 100);
+            pic1.Location = new Point(25, 70);
+            pic1.Click += Pic_Click;
+            pic1.Name = "rock1";
+            this.Controls.Add(pic1);
 
-            pic = new PictureBox();
-            pic.Image = Properties.Resources.paper1;
-            pic.SizeMode = PictureBoxSizeMode.StretchImage;
-            pic.Size = new Size(100, 100);
-            pic.Location = new Point(25, 190);
-            pic.Click += Pic_Click;
-            pic.Name = "paper1";
-            this.Controls.Add(pic);
+            pic2 = new PictureBox();
+            pic2.Image = Properties.Resources.paper1;
+            pic2.SizeMode = PictureBoxSizeMode.StretchImage;
+            pic2.Size = new Size(100, 100);
+            pic2.Location = new Point(25, 190);
+            pic2.Click += Pic_Click;
+            pic2.Name = "paper1";
+            this.Controls.Add(pic2);
 
-            pic = new PictureBox();
-            pic.Image = Properties.Resources.scissors1;
-            pic.SizeMode = PictureBoxSizeMode.StretchImage;
-            pic.Size = new Size(100, 100);
-            pic.Location = new Point(25, 300);
-            pic.Click += Pic_Click;
-            pic.Name = "scissors1";
-            this.Controls.Add(pic);
+            pic3 = new PictureBox();
+            pic3.Image = Properties.Resources.scissors1;
+            pic3.SizeMode = PictureBoxSizeMode.StretchImage;
+            pic3.Size = new Size(100, 100);
+            pic3.Location = new Point(25, 300);
+            pic3.Click += Pic_Click;
+            pic3.Name = "scissors1";
+            this.Controls.Add(pic3);
 
             btn = new Button();
             btn.Size = new Size(100,50);
@@ -82,7 +82,7 @@ namespace RockPaperScissors
             btn.Text = "Begin Battle";
             btn.FlatAppearance.BorderSize = 0;
             btn.BackColor = this.BackColor;
-            btn.Name = "1p";
+            btn.Name = "battle";
             this.Controls.Add(btn);
 
             list = new ListBox();
@@ -138,51 +138,37 @@ namespace RockPaperScissors
         }
         private void Pic_Click(object sender, EventArgs e)
         {
-            lbl = (Label)getFormControl("choice");
             PictureBox p = sender as PictureBox;
-            Console.WriteLine(p.Name);
             switch (p.Name.Substring(p.Name.Length - 1))
             {
                 case "1":
                     choice[0] = p.Name.Substring(0, p.Name.Length - 1);
-                    lbl.Text = "Selected: "+ Capitalize(p.Name.Substring(0, p.Name.Length - 1));
-                    if (turn1 == true)
-                    {
-                        replaceName('1', '2');
-                    }
+                    lbl2.Text = "Selected: "+ Capitalize(p.Name.Substring(0, p.Name.Length - 1));
                     break;
                 case "2":
                     choice[1] = p.Name.Substring(0, p.Name.Length - 1);
-                    lbl.Text = "P2 Selected: " + Capitalize(p.Name.Substring(0, p.Name.Length - 1));
-                    if (turn1==false)
-                    {
-                        
-                    }
+                    lbl2.Text = "P2 Selected: " + Capitalize(p.Name.Substring(0, p.Name.Length - 1));
                     break;
             }
         }
 
         private void Btn_Click(object sender, EventArgs e)
         {
-            if (bot==false)
+            if (pic1.Name.Substring(pic1.Name.Length - 1)=="1" && bot==false)
             {
                 btnText(2);
                 turn1 = !turn1;
-                if (turn1 == true)
+                replaceName('1', '2');
+            }
+            else
+            {
+                if (bot==true)
                 {
-                    replaceName('1', '2');
+                    choice[1] = rps[rng.Next(0,3)];
                 }
                 else
                 {
                     replaceName('2', '1');
-                }
-            }
-            else
-            {
-                lbl = (Label)getFormControl("outcome");
-                if (bot==true)
-                {
-                    choice[1] = rps[rng.Next(0,3)];
                 }
                 if (win()==0)
                 {
@@ -196,14 +182,13 @@ namespace RockPaperScissors
                 {
                     lbl.Text = "Stalemate";
                 }
-            
-                for (int j = 0; j < 3; j++)
-                {
-                    pic = (PictureBox)getFormControl(rps[j] + pic.Name.Substring(pic.Name.Length - 1));
-                    pic.Image = Image.FromFile("../../Resources/" + pic.Name.Substring(0, pic.Name.Length - 1) + rng.Next(1, 4).ToString() + ".jpg");
-                }
+
+
+                pic1.Image = Image.FromFile("../../Resources/" + pic1.Name.Substring(0, pic1.Name.Length - 1) + rng.Next(1, 4).ToString() + ".jpg");
+                pic2.Image = Image.FromFile("../../Resources/" + pic2.Name.Substring(0, pic2.Name.Length - 1) + rng.Next(1, 4).ToString() + ".jpg");
+                pic3.Image = Image.FromFile("../../Resources/" + pic3.Name.Substring(0, pic3.Name.Length - 1) + rng.Next(1, 4).ToString() + ".jpg");
             }
-            
+
             //resultsWrite();
             //listUpdate();
         }
@@ -251,11 +236,9 @@ namespace RockPaperScissors
         }
         private void replaceName(char i, char k)
         {
-            for (int j = 0; j < 3; j++)
-            {
-                pic = (PictureBox)getFormControl(rps[j] + i);
-                pic.Name = pic.Name.Replace(i, k);
-            }
+            pic1.Name = pic1.Name.Replace(i, k);
+            pic2.Name = pic2.Name.Replace(i, k);
+            pic3.Name = pic3.Name.Replace(i, k);
         }
         private void btnText(int i)
         {
