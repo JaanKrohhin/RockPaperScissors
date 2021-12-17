@@ -17,41 +17,46 @@ namespace RockPaperScissors
         
         Random rng = new Random();
         PictureBox pic1,pic2,pic3;
-        string[] tempAr, choice = new string[2] {"rock","rock"}, rps = { "rock", "paper", "scissors"}, results = new string[10];
-        bool bot = true, turn1 = false;
-        int count = 0, winEW;//just count through the ten
-        Label lbl, lbl2, dummy;
+        string[] choice = new string[2] {"rock","rock"}, rps = { "rock", "paper", "scissors"};
+        List<string> results;
+        bool bot = true;
+        int  winEW;
+        Label lbl, lbl2;
         ListBox list;
         Button btn;
+        TextBox txt1, txt2;
         
         public Form1()
         {
+            results = new List<String>(fileRead());
             choice[0] = "rock";
-            this.Size = new Size(500,600);
-            this.Text = "Rock Papers Scissors";
-            this.BackColor = Color.LightCyan;
+            this.Size = new Size(360,525);
+            this.Text = "Kivi, Paber, Käärid";
+            this.BackgroundImage = Properties.Resources.back2;
             this.ForeColor = Color.Black;
             this.Font = new Font("Arial", 12);
             this.Icon = Properties.Resources.battle;
 
             lbl = new Label();
-            lbl.Size = new Size(100, 25);
+            lbl.Size = new Size(150, 25);
             lbl.Location = new Point(180, 25);
+            lbl.BackColor = Color.Transparent;
             lbl.TextAlign = (ContentAlignment)HorizontalAlignment.Center;
             lbl.Name = "outcome";
             this.Controls.Add(lbl);
 
             lbl2 = new Label();
-            lbl2.Size = new Size(200, 25);
+            lbl2.Size = new Size(180, 25);
             lbl2.Location = new Point(20, 25);
+            lbl.BackColor = Color.Transparent;
             lbl2.Name = "choice";
-            lbl2.Text = "Selected: "+Capitalize(choice[0]);
+            lbl2.Text = "Valitud: "+Capitalize(choice[0]);
             this.Controls.Add(lbl2);
 
             pic1 = new PictureBox();
             pic1.Image = Properties.Resources.rock1;
             pic1.SizeMode = PictureBoxSizeMode.StretchImage;
-            pic1.Size = new Size(100, 100);
+            pic1.Size = new Size(100, 110);
             pic1.Location = new Point(25, 70);
             pic1.Click += Pic_Click;
             pic1.Name = "rock1";
@@ -77,9 +82,9 @@ namespace RockPaperScissors
 
             btn = new Button();
             btn.Size = new Size(100,50);
-            btn.Location = new Point(180, 50);
+            btn.Location = new Point(180, 60);
             btn.Click += Btn_Click;
-            btn.Text = "Begin Battle";
+            btn.Text = "Alusta";
             btn.FlatAppearance.BorderSize = 0;
             btn.BackColor = this.BackColor;
             btn.Name = "battle";
@@ -87,13 +92,26 @@ namespace RockPaperScissors
 
             list = new ListBox();
             list.Size = new Size(120,210);
-            list.Location = new Point(170, 110);
+            list.Location = new Point(170, 120);
             this.Controls.Add(list);
+
+            txt1 = new TextBox();
+            txt1.Size = new Size(100, 15);
+            txt1.Location = new Point(170, 340);
+            txt1.Text = "1 Mängija";
+            this.Controls.Add(txt1);
+
+            txt2 = new TextBox();
+            txt2.Size = new Size(100, 15);
+            txt2.Location = new Point(170, 370);
+            txt2.Text = "AI Martin";
+            this.Controls.Add(txt2);
+            txt2.Hide();
 
             MainMenu menu = new MainMenu();
             MenuItem mf = new MenuItem("Settings");
-            mf.MenuItems.Add("2 Player Mode", new EventHandler(botEn)).Shortcut = Shortcut.CtrlS;
-            mf.MenuItems.Add("Complex Background", new EventHandler(menuFile_Select1)).Shortcut = Shortcut.CtrlD;
+            mf.MenuItems.Add("2 Mängijat", new EventHandler(botEn)).Shortcut = Shortcut.CtrlS;
+            mf.MenuItems.Add("Simple Background", new EventHandler(menuFile_Select1)).Shortcut = Shortcut.CtrlD;
             mf.MenuItems.Add("Rules", new EventHandler(menuFile_Select2)).Shortcut = Shortcut.CtrlA;
             mf.MenuItems.Add("Exit", new EventHandler(menuFile_Select3));
             menu.MenuItems.Add(mf);
@@ -106,10 +124,14 @@ namespace RockPaperScissors
             if (bot == false)
             {
                 btnText(1);
+                txt2.Text = "2 Mängija";
+                txt2.Show();
             }
             else
             {
                 btnText(2);
+                txt2.Text = "AI Martin";
+                txt2.Hide();
             }
 
         }
@@ -119,18 +141,26 @@ namespace RockPaperScissors
             m.Checked = !m.Checked;
             if (m.Checked == true)
             {
-                this.BackgroundImage = Properties.Resources.back;
+                this.BackgroundImage = null;
+                this.BackColor = Color.LightCyan;
             }
             else
             {
-                this.BackgroundImage = null;
-                this.BackColor = Color.LightCyan;
+                this.BackgroundImage = Properties.Resources.back2;
             }
         }
 
         private void menuFile_Select2(object sender, EventArgs e)
         {
-            MessageBox.Show("Paper beats Rock, Rock beats Scissors, Scissors beat Paper", "Rules of the game");
+            MessageBox.Show(@"Paber võidab kivi, kivi võidab käärid, käärid võidavad paberit.
+1 Mängija
+Valitud kauba valimiseks peate klõpsama oma kauba pilti, ennekõike piltide puhul on see teie valik.
+Kui olete valmis, vajutage nuppu!
+
+2 Mängijat
+Esimene mängija valib oma eseme ja seejärel vajutab nuppu.
+Seejärel valib 2 mängijat oma ja laseb mängul alata!
+", "Mängureeglid");
         }
         private void menuFile_Select3(object sender, EventArgs e)
         {
@@ -143,11 +173,11 @@ namespace RockPaperScissors
             {
                 case "1":
                     choice[0] = p.Name.Substring(0, p.Name.Length - 1);
-                    lbl2.Text = "Selected: "+ Capitalize(p.Name.Substring(0, p.Name.Length - 1));
+                    lbl2.Text = "Valitud: "+ Capitalize(p.Name.Substring(0, p.Name.Length - 1));
                     break;
                 case "2":
                     choice[1] = p.Name.Substring(0, p.Name.Length - 1);
-                    lbl2.Text = "P2 Selected: " + Capitalize(p.Name.Substring(0, p.Name.Length - 1));
+                    lbl2.Text = "P2 Valitud: " + Capitalize(p.Name.Substring(0, p.Name.Length - 1));
                     break;
             }
         }
@@ -157,8 +187,8 @@ namespace RockPaperScissors
             if (pic1.Name.Substring(pic1.Name.Length - 1)=="1" && bot==false)
             {
                 btnText(2);
-                turn1 = !turn1;
                 replaceName('1', '2');
+                lbl2.Text = "Valitud:" +Capitalize(choice[1]);
             }
             else
             {
@@ -170,27 +200,28 @@ namespace RockPaperScissors
                 {
                     replaceName('2', '1');
                 }
-                if (win()==0)
+                winEW = win();
+                if (winEW==0)
                 {
-                    lbl.Text = "Opponent Win";
+                    lbl.Text = txt2.Text +" Võitis";
                 }
-                else if (win()==1)
+                else if (winEW == 1)
                 {
-                    lbl.Text = "Host Win";
+                    lbl.Text = txt1.Text + " Võitis";
                 }
-                else if (win()==2)
+                else if (winEW == 2)
                 {
-                    lbl.Text = "Stalemate";
+                    lbl.Text = "Viik";
                 }
-
-
                 pic1.Image = Image.FromFile("../../Resources/" + pic1.Name.Substring(0, pic1.Name.Length - 1) + rng.Next(1, 4).ToString() + ".jpg");
                 pic2.Image = Image.FromFile("../../Resources/" + pic2.Name.Substring(0, pic2.Name.Length - 1) + rng.Next(1, 4).ToString() + ".jpg");
                 pic3.Image = Image.FromFile("../../Resources/" + pic3.Name.Substring(0, pic3.Name.Length - 1) + rng.Next(1, 4).ToString() + ".jpg");
+                if (bot==false)
+                {
+                    btnText(1);
+                }
+                update();
             }
-
-            //resultsWrite();
-            //listUpdate();
         }
         private int win()
         {
@@ -244,16 +275,15 @@ namespace RockPaperScissors
         {
             if (i==1)
             {
-                btn.Text = "Next Battle";
+                btn.Text = "Järgmine Mäng";
             }
             else
             {
-                btn.Text = "Battle";
+                btn.Text = "Alusta";
             }
         }
-        private void resultsWrite()
+        private void fileWrite()
         {
-            resultArraysort();
             using (StreamWriter file = new StreamWriter(@"../../Resources/results.txt"))
             {
                 foreach (var item in results)
@@ -262,58 +292,23 @@ namespace RockPaperScissors
                 }
             }
         }
-        private void resultsRead()
+        private string[] fileRead()
         {
             using (StreamReader file = new StreamReader(@"../../Resources/results.txt"))
             {
-                tempAr= file.ReadLine().Split('-');
-                for (int i = 0; i < results.Length; i++)
-                {
-                    results[i] = tempAr[i];
-                }
-                resultArraysort();
+                return file.ReadLine().Split('-');
             }
         }
-        private void resultArraysort()
+        private void update()
         {
-            //Array.Reverse(results);
-            //Array.Copy(results, 1, results, 0, results.Length - 1);
-            //results[results.Length - 1] = rightLabel("outcome");
-            //for (int i = 0; i < results.Length; i++)
-            //{
-            //    for (int j = 0; j < results.Length; j++)
-            //    {
-            //        if (i == 0) 
-            //        {
-
-            //        }
-            //        else
-            //        {
-            //            results[i] = results[i + 1];
-            //        }
-            //    }
-            //}
-        }
-        private void listUpdate()
-        {
+            results.Insert(0, lbl.Text);
+            results.RemoveAt(10);
             list.Items.Clear();
-            tempAr = results;
-            for (int i = 0; i < results.Length; i++)
+            foreach (string item in results)
             {
-                list.Items.Add(results[i]);
+                list.Items.Add(item);
             }
-        }
-        private Control getFormControl(string str)
-        {
-            foreach (Control item in this.Controls)
-            {
-                if (item.Name==str)
-                {
-                    return item;
-                }
-            }
-            return dummy;
-            
+            fileWrite();
         }
         public string Capitalize(string str)
         {
